@@ -57,6 +57,11 @@ export type CatBreedItem = {
   image: Image | undefined;
 };
 
+export type CatImage = Image & {
+  breeds: { id: string; name: string }[] | undefined;
+};
+
+export type getCatImagesResponse = Image[];
 export type getCatBreedsResponse = CatBreed[];
 
 export type getCatImageResponse = {
