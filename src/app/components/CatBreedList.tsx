@@ -25,7 +25,7 @@ export default function CatBreedList({
     useState<CatBreedItem[]>(initialCatBreedList);
   const { ref, inView } = useInView();
 
-  //Try to use suspense
+  //Try to use suspense new
   useEffect(() => {
     const loadMoreCatBreeds = async () => {
       const newList = await fetchMoreCatBreeds(
