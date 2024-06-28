@@ -1,9 +1,10 @@
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
-import fetchCatBreeds, { fetchCatImage } from "@/app/lib/fetchCatBreeds";
-import CatBreedsContainer from "@/app/components/CatBreedsContainer";
-
+import { ReactNode } from "react";
+import Autocomplete, {
+  AutocompleteRenderInputParams,
+} from "@mui/material/Autocomplete";
+// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const top100Films = [
   { label: "The Shawshank Redemption", year: 1994 },
   { label: "The Godfather", year: 1972 },
@@ -131,16 +132,16 @@ const top100Films = [
   { label: "3 Idiots", year: 2009 },
   { label: "Monty Python and the Holy Grail", year: 1975 },
 ];
-
-export default async function Home() {
-  const catBreedList = await fetchCatBreeds();
-
-  // console.log(catBreedList);
+const SearchCats = () => {
   return (
-    <Container maxWidth="lg">
-      <Box>
-        <CatBreedsContainer catBreedList={catBreedList} />
-      </Box>
-    </Container>
+    <Autocomplete
+      disablePortal
+      id="search-cats"
+      options={top100Films}
+      sx={{ width: 300 }}
+      renderInput={(params) => <TextField {...params} label="Movie" />}
+    />
   );
-}
+};
+
+export default SearchCats;
