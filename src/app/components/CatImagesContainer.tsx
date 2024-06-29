@@ -2,26 +2,30 @@
 import Container from "@mui/material/Container";
 
 import { CatImage } from "../lib/catBreedTypes";
-import { Suspense } from "react";
+import { Suspense, useId, useState } from "react";
 
 import Box from "@mui/material/Box";
 import SearchCatBreeds from "./SearchCatBreeds";
 import CatImageList from "./CatBreedList";
+import { useRouter } from "next/navigation";
+import GenericError from "./GenericError";
 
 type CatImagesContainerProps = {
   searchQuery: string;
   currentPage: number;
-  catImagesList: CatImage[] | null;
-  selectedBreed: string;
-  catBreedSearchOptions: { label: string; id: string }[];
+  initialCatImageList: CatImage[] | null;
+  selectedBreed: { label: string; id: string } | null;
+  // catBreedSearchOptions: { label: string; id: string }[] | null;
 };
 export default function CatImagesContainer({
   searchQuery,
   currentPage,
-  catImagesList,
-  catBreedSearchOptions,
+  initialCatImageList,
   selectedBreed,
 }: CatImagesContainerProps) {
+  const { refresh } = useRouter();
+  const id = useId();
+
   return (
     <Container maxWidth="xl">
       <Box
@@ -32,18 +36,16 @@ export default function CatImagesContainer({
         gap={4}
         p={4}
       >
-        <SearchCatBreeds
-          catBreedSearchOptions={catBreedSearchOptions}
-          selectedBreed={selectedBreed}
-        />
+        <SearchCatBreeds selectedBreed={selectedBreed} />
         <Suspense fallback={<div>Loading...</div>}>
-          {catImagesList ? (
+          {initialCatImageList ? (
             <CatImageList
+              key={Math.random()}
               currentPage={currentPage}
-              initialCatImageList={catImagesList}
+              initialCatImageList={initialCatImageList}
             />
           ) : (
-            <div>No search results</div>
+            <GenericError onResetClicked={() => refresh()} />
           )}
         </Suspense>
       </Box>

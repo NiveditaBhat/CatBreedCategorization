@@ -1,11 +1,10 @@
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 
-import fetchCatBreeds, {
-  fetchCatImages,
-  searchCatBreeds,
-} from "./lib/fetchCatBreedData";
+import { searchCatBreeds } from "./lib/fetchCatImagesData";
 import CatImagesContainer from "./components/CatImagesContainer";
+import { fetchCatImages } from "./actions/fetchCatImages";
+import reFetchCatImages from "./actions/reFetchCatImages";
 
 export default async function Home({
   searchParams,
@@ -21,23 +20,25 @@ export default async function Home({
   const breedId = searchParams?.breed || "";
 
   const catImages = await fetchCatImages(0, breedId);
-  // console.log("catImages", catImages);
-  // const catBreedList = await fetchCatBreeds();
-  const catBreedSearchResult = await searchCatBreeds(searchQuery);
-  const catBreedSearchOptions = catBreedSearchResult?.map(({ name, id }) => ({
-    id,
-    label: name,
-  }));
+  console.log("catImagesserver", JSON.stringify(catImages));
+
+  // const catBreedSearchResult = await searchCatBreeds(searchQuery);
+  // const catBreedSearchOptions =
+  //   catBreedSearchResult?.map(({ name, id }) => ({
+  //     id,
+  //     label: name,
+  //   })) ?? null;
+  // const selectedBreed =
+  //   catBreedSearchOptions?.find(({ id }) => id === breedId) ?? null;
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="xl">
       <Box>
         <CatImagesContainer
           searchQuery={searchQuery}
           currentPage={currentPage}
-          selectedBreed={breedId}
-          catImagesList={catImages}
-          catBreedSearchOptions={catBreedSearchOptions}
+          selectedBreed={null}
+          initialCatImageList={catImages}
         />
       </Box>
     </Container>

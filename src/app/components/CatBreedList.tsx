@@ -1,17 +1,19 @@
 "use client";
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
+
 import Image from "next/image";
 
-import { CatBreedItem, CatImage } from "../lib/catBreedTypes";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
+import { CatImage } from "../lib/catBreedTypes";
 import Typography from "@mui/material/Typography";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 
 import { useInView } from "react-intersection-observer";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { fetchMoreCatImages } from "@/app/actions/fetchMoreCatImages";
+import { fetchCatImages } from "../actions/fetchCatImages";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import { StyledCard } from "./styles";
+import { blueGrey } from "@mui/material/colors";
 
 type CatImageListProps = {
   initialCatImageList: CatImage[];
@@ -34,79 +36,65 @@ export default function CatImageList({
 
   useEffect(() => {
     const loadMoreCatBreeds = async () => {
-      const newList = await fetchMoreCatImages(page + 1);
-      console.log("newList", newList);
+      const newList = await fetchCatImages(page + 1);
 
       if (!newList) {
         return;
       }
+
       setCatImageList(newList ? [...catImageList, ...newList] : catImageList);
       setPage(page + 1);
     };
     if (inView) {
-      loadMoreCatBreeds();
       // const params = new URLSearchParams(searchParams);
       //
       // params.set("page", String(currentPage + 1));
       // replace(`${pathname}?${params.toString()}`);
+      loadMoreCatBreeds();
     }
   }, [inView]);
 
   return (
     <>
-      <Grid container spacing={1}>
-        {initialCatImageList.map(({ id, url, breeds }) =>
+      <Typography
+        variant="subtitle1"
+        alignSelf="flex-start"
+      >{`Showing ${catImageList.length} results`}</Typography>
+      <Grid container spacing={2}>
+        {catImageList.map(({ id, url, breeds }) =>
           breeds?.map(({ name }) => (
-            <Grid
-              key={id}
-              item
-              sm={2}
-              md={3}
-              lg={4}
-              xl={6}
-              height={300}
-              spacing={1}
-              alignItems="center"
-            >
-              {/*<Paper elevation={1}>*/}
-              <Card
-                variant="outlined"
-                style={{
-                  width: "auto",
-                  height: "300px",
-                }}
-              >
-                <CardContent
-                  style={{
-                    position: "relative",
-                    width: "auto",
-                    height: "90%",
-                    backgroundColor: "#ECEFF1",
-                  }}
+            <Grid key={id} item sm={6} md={4} lg={3} xl={2} alignItems="center">
+              <StyledCard variant="outlined" tabIndex={0}>
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  bgcolor={blueGrey[50]}
+                  height="239px"
+                  width="auto"
                 >
                   <Image
                     src={url}
                     width={226}
                     height={217}
+                    //fill
                     priority={false}
                     style={{
                       height: "100%",
                       width: "auto",
-                      marginLeft: "auto",
-                      marginRight: "auto",
+                      objectFit: "contain",
                     }}
-                    //className="hidden md:block"
-                    alt={"image of cat breed"}
+                    alt={`Image of cat breed ${name}`}
                   />
-                </CardContent>
-                <Typography variant="subtitle1">{name}</Typography>
-              </Card>
-              {/*</Paper>*/}
+                </Box>
+                <Typography padding="16px" variant="subtitle1">
+                  {name}
+                </Typography>
+              </StyledCard>
             </Grid>
           )),
         )}
       </Grid>
-      <div ref={ref}>Loading more...</div>
+      <CircularProgress ref={ref} />
     </>
   );
 }

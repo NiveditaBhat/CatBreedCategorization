@@ -62,7 +62,7 @@ export type CatImage = Image & {
 };
 
 export type getCatImagesResponse = Image[];
-export type getCatBreedsResponse = CatBreed[];
+export type getCatBreedsResponse = { id: string; name: string }[];
 
 export type getCatImageResponse = {
   id: string;
