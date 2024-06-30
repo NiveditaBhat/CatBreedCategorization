@@ -37,6 +37,10 @@ export default function GenericError({ onResetClicked }: ErrorProps) {
           color="primary"
           size="medium"
           onClick={onResetClicked}
+          sx={{
+            color: "white",
+            textTransform: "capitalize",
+          }}
         >
           Refresh
         </Button>

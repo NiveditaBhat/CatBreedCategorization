@@ -1,23 +1,5 @@
-import { CatBreedItem, CatImage, getCatBreedsResponse } from "./catBreedTypes";
-import {
-  getCatBreedsByImage,
-  getCatImages,
-  searchCatBreedsByName,
-} from "./catBreedAPIs";
-import { revalidateTag } from "next/cache";
-
-const fetchCatBreeds = async (id: string) => {
-  const catBreedsData = await getCatBreedsByImage(id);
-
-  if (!catBreedsData) {
-    return;
-  }
-
-  return catBreedsData.map(({ name, id }) => ({
-    id,
-    name,
-  }));
-};
+import { CatImage, getCatBreedsResponse } from "./catBreedTypes";
+import { getCatImages, searchCatBreedsByName } from "./catBreedAPIs";
 
 export const fetchCatImages = async (
   page = 0,
@@ -30,17 +12,13 @@ export const fetchCatImages = async (
     return null;
   }
 
-  const ret = await Promise.all(
-    response.map(async (catImage) => {
-      const breeds = await fetchCatBreeds(catImage.id);
-      return {
-        ...catImage,
-        breeds,
-      };
-    }),
-  );
-  console.log(JSON.stringify(ret));
-  return ret;
+  return response.map(({ id, width, height, url, breeds }) => ({
+    id,
+    width,
+    height,
+    url,
+    breeds: breeds?.map(({ id, name }) => ({ id, name })),
+  }));
 };
 
 export const searchCatBreeds = async (

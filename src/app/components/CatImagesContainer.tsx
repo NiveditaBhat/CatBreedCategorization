@@ -1,21 +1,21 @@
 "use client";
-import Container from "@mui/material/Container";
 
 import { CatImage } from "../lib/catBreedTypes";
-import { Suspense, useId, useState } from "react";
-
+import { Suspense } from "react";
+import { v4 as uuid } from "uuid";
 import Box from "@mui/material/Box";
 import SearchCatBreeds from "./SearchCatBreeds";
-import CatImageList from "./CatBreedList";
+import CatImageList from "./CatImageList";
 import { useRouter } from "next/navigation";
 import GenericError from "./GenericError";
+import LoadingSkeleton from "./LoadingSkeletonList";
+import LoadingSkeletonList from "./LoadingSkeletonList";
 
 type CatImagesContainerProps = {
   searchQuery: string;
   currentPage: number;
   initialCatImageList: CatImage[] | null;
   selectedBreed: { label: string; id: string } | null;
-  // catBreedSearchOptions: { label: string; id: string }[] | null;
 };
 export default function CatImagesContainer({
   searchQuery,
@@ -24,31 +24,25 @@ export default function CatImagesContainer({
   selectedBreed,
 }: CatImagesContainerProps) {
   const { refresh } = useRouter();
-  const id = useId();
+  const id = uuid();
 
   return (
-    <Container maxWidth="xl">
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        gap={4}
-        p={4}
-      >
-        <SearchCatBreeds selectedBreed={selectedBreed} />
-        <Suspense fallback={<div>Loading...</div>}>
-          {initialCatImageList ? (
-            <CatImageList
-              key={Math.random()}
-              currentPage={currentPage}
-              initialCatImageList={initialCatImageList}
-            />
-          ) : (
-            <GenericError onResetClicked={() => refresh()} />
-          )}
-        </Suspense>
-      </Box>
-    </Container>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      gap={4}
+      p={4}
+    >
+      <SearchCatBreeds selectedBreed={selectedBreed} />
+      <CatImageList
+        //force re-render when search option updates
+        key={id}
+        currentPage={currentPage}
+        initialCatImageList={initialCatImageList}
+        selectedBreed={selectedBreed?.id ?? ""}
+      />
+    </Box>
   );
 }

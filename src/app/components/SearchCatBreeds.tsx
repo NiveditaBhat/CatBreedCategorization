@@ -1,14 +1,10 @@
 import TextField from "@mui/material/TextField";
 import { useDebouncedCallback } from "use-debounce";
-import { ReactNode, SyntheticEvent, useState } from "react";
-import Autocomplete, {
-  AutocompleteRenderInputParams,
-} from "@mui/material/Autocomplete";
+import { SyntheticEvent, useState } from "react";
+import Autocomplete from "@mui/material/Autocomplete";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { CatBreedItem } from "@/app/lib/catBreedTypes";
-import reFetchCatImages from "../actions/reFetchCatImages";
-import { searchCatBreedOptions } from "@/app/actions/searchCatBreeds";
-import { AutocompleteInputChangeReason } from "@mui/material";
+
+import { searchCatBreedOptions } from "../actions/searchCatBreeds";
 
 const DEBOUNCE_INTERVAL = 200;
 
@@ -18,7 +14,7 @@ type SearchOption = {
 };
 
 type SearchCatBreedsProps = {
-  selectedBreed: { label: string; id: string } | null;
+  selectedBreed: SearchOption | null;
 };
 
 export default function SearchCatBreeds({
@@ -26,80 +22,54 @@ export default function SearchCatBreeds({
 }: SearchCatBreedsProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { replace } = useRouter();
+  const { replace, refresh } = useRouter();
 
-  // const [selectedValue, setSelectedValue] = useState<{
-  //   label: string;
-  //   id: string;
-  // } | null>(selectedBreed);
-  // const [inputValue, setInputValue] = useState(defaultInputValue);
+  const [searchOptions, setSearchOptions] = useState<SearchOption[]>(
+    selectedBreed ? [selectedBreed] : [],
+  );
+  //const [value, setValue] = useState<SearchOption | null>(selectedBreed);
 
-  // const handleSearch = useDebouncedCallback((value: string) => {
-  //   const params = new URLSearchParams(searchParams);
-  //   if (value) {
-  //     params.set("query", value);
-  //   } else {
-  //     params.delete("query");
-  //   }
-  //   if (selectedValue) {
-  //     params.set("breed", selectedValue.id);
-  //   } else {
-  //     params.delete("breed");
-  //   }
-  //   replace(`${pathname}?${params.toString()}`);
-  // }, DEBOUNCE_INTERVAL);
-
-  const [searchOptions, setSearchOptions] = useState<SearchOption[]>([]);
-
-  const handleSearch = useDebouncedCallback((value: string) => {
+  const handleOnChange = async (value: SearchOption | null) => {
+    //  setValue(value);
     const params = new URLSearchParams(searchParams);
     if (value) {
-      params.set("breed", value);
+      params.set("breed_id", value.id);
+      params.set("breed_name", value.label);
     } else {
-      params.delete("breed");
+      params.delete("breed_id");
+      params.delete("breed_name");
     }
-    // if (value) {
-    //   params.set("query", value);
-    // } else {
-    //   params.delete("query");
-    // }
-    // if (selectedValue) {
-    //   params.set("breed", selectedValue.id);
-    // } else {
-    //   params.delete("breed");
-    // }
-    replace(`${pathname}?${params.toString()}`);
-  }, DEBOUNCE_INTERVAL);
 
-  const handleInputValueChange = async (
-    event: SyntheticEvent<Element, Event>,
-    inputValue: string,
-    reason: AutocompleteInputChangeReason,
-  ) => {
-    const catBreedSearchResult = await searchCatBreedOptions(inputValue);
-    const catBreedSearchOptions =
-      catBreedSearchResult?.map(({ name, id }) => ({
-        id,
-        label: name,
-      })) ?? [];
-    setSearchOptions(catBreedSearchOptions);
-    // const selectedBreed =
-    //   catBreedSearchOptions?.find(({ id }) => id === breedId) ?? null;
+    replace(`${pathname}?${params.toString()}`);
   };
+
+  const handleInputValueChange = useDebouncedCallback(
+    async (inputValue: string) => {
+      const catBreedSearchResult = await searchCatBreedOptions(inputValue);
+
+      const catBreedSearchOptions =
+        catBreedSearchResult?.map(({ name, id }) => ({
+          id,
+          label: name,
+        })) ?? [];
+      setSearchOptions(catBreedSearchOptions);
+    },
+    DEBOUNCE_INTERVAL,
+  );
 
   return (
     <Autocomplete
-      //  value={selectedValue}
+      defaultValue={selectedBreed}
       onChange={(event, newValue) => {
-        //   setSelectedValue(newValue);
-        handleSearch(newValue?.id ?? "");
-        // console.log("id", newValue.id);
-        // const params = new URLSearchParams(searchParams);
-        // params.set("breed", newValue.id);
-        // replace(`${pathname}?${params.toString()}`);
+        handleOnChange(newValue);
       }}
-      // inputValue={defaultInputValue}
-      onInputChange={handleInputValueChange}
+      onInputChange={(
+        event: React.SyntheticEvent,
+        value: string,
+        reason: string,
+      ) => {
+        handleInputValueChange(value);
+      }}
       id="search-cat-breeds"
       getOptionLabel={(option) => option.label}
       options={searchOptions}

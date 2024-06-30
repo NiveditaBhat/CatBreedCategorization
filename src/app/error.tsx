@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import GenericError from "./components/GenericError";
+import SearchCatBreeds from "@/app/components/SearchCatBreeds";
 
 export default function Error({
   error,
@@ -24,11 +25,14 @@ export default function Error({
     >
       <Box
         display="flex"
+        flexDirection="column"
         alignItems="center"
         justifyContent="center"
-        height="100%"
+        gap={20}
+        p={4}
       >
-        <GenericError onResetClicked={reset} />
+        <SearchCatBreeds selectedBreed={null} />
+        <GenericError onResetClicked={() => reset()} />
       </Box>
     </Container>
   );
