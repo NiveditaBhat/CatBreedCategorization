@@ -1,12 +1,13 @@
-import { CatImage, getCatBreedsResponse } from "./catBreedTypes";
+import { CatBreed, CatImage, GetCatBreedsResponse } from "./catBreedTypes";
 import { getCatImages, searchCatBreedsByName } from "./catBreedAPIs";
 
 export const fetchCatImages = async (
   page = 0,
   breedId = "",
+  limit = 10,
 ): Promise<CatImage[] | null> => {
-  const response = await getCatImages(10, page, breedId);
-  console.log("page", page);
+  const response = await getCatImages(limit, page, breedId);
+  console.log("getCatImages", JSON.stringify(response));
 
   if (!response) {
     return null;
@@ -23,13 +24,19 @@ export const fetchCatImages = async (
 
 export const searchCatBreeds = async (
   query: string,
-): Promise<getCatBreedsResponse | null> => {
+): Promise<CatBreed[] | null> => {
   const response = await searchCatBreedsByName(query);
-
+  // console.log("searchbreeds", response);
   if (!response) {
     return null;
   }
-
+  console.log(
+    "carBreed",
+    response.map(({ id, name }) => ({
+      id,
+      name,
+    })),
+  );
   return response.map(({ id, name }) => ({
     id,
     name,

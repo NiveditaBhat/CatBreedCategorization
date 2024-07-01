@@ -17,7 +17,7 @@ export default function GenericError({ onResetClicked }: ErrorProps) {
       gap={4}
     >
       <Box>
-        <Image src="/error.svg" alt="error image" height={100} width={100} />
+        <Image src="/error.svg" alt="Error icon" height={100} width={100} />
       </Box>
       <Box
         display="flex"

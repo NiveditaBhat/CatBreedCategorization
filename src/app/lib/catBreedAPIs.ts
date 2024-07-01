@@ -1,18 +1,16 @@
-import { getCatBreedsResponse, getCatImagesResponse } from "./catBreedTypes";
+import { GetCatBreedsResponse, GetCatImagesResponse } from "./catBreedTypes";
+import { API_BASE, API_KEY } from "@/config";
 
 const HEADERS = {
   "content-type": "application/json",
   "x-api-key": process.env.API_KEY ?? "",
 };
-const API_KEY = process.env.API_KEY ?? "";
-
-const API_BASE = process.env.API_BASE;
 
 export const getCatImages = async (
   limit: number,
   page: number,
   breedId?: string,
-): Promise<getCatImagesResponse> => {
+): Promise<GetCatImagesResponse> => {
   const response = await fetch(
     `${API_BASE}/v1/images/search?limit=${limit}&page=${page}&has_breeds=true&order=ASC&breed_ids=${breedId}&api_key=${API_KEY}`,
     {
@@ -21,7 +19,7 @@ export const getCatImages = async (
       next: { tags: ["catImages"] },
     },
   );
-  console.log("response", response);
+  // console.log("response", response);
   if (!response.ok) {
     throw new Error("Failed to fetch cat images data");
   }
@@ -31,7 +29,7 @@ export const getCatImages = async (
 
 export const searchCatBreedsByName = async (
   searchQuery: string,
-): Promise<getCatBreedsResponse> => {
+): Promise<GetCatBreedsResponse> => {
   const response = await fetch(
     `${API_BASE}/v1/breeds/search?q=${searchQuery}&api_key=${API_KEY}`,
     {

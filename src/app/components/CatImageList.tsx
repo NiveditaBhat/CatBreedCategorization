@@ -19,7 +19,7 @@ type CatImageListProps = {
   selectedBreed: string;
 };
 
-const LIMIT = 10;
+const PAGE_LIMIT = 10;
 
 export default function CatImageList({
   initialCatImageList,
@@ -29,39 +29,41 @@ export default function CatImageList({
   const { ref, inView } = useInView();
   const [offset, setOffset] = useState(currentPage);
   const [loadMoreImages, setLoadMoreImages] = useState(true);
-  const [isLaoding, setIsLoading] = useState(false);
 
   const [catImageList, setCatImageList] = useState<CatImage[] | null>(
     initialCatImageList,
   );
-
-  console.log("catImageList", catImageList);
+  const numberOfResults = catImageList?.length ?? 0;
 
   useEffect(() => {
     const loadMoreCatBreeds = async () => {
-      const newList = await fetchCatImages(offset + LIMIT, selectedBreed);
-
+      const newList = await fetchCatImages(offset + PAGE_LIMIT, selectedBreed);
+      console.log("offset + PAGE_LIMIT", offset + PAGE_LIMIT);
       if (!newList?.length) {
         setLoadMoreImages(false);
         return;
       }
 
       setCatImageList((prev) => [...(prev?.length ? prev : []), ...newList]);
-      setOffset(offset + LIMIT);
+      setOffset(offset + PAGE_LIMIT);
     };
     if (inView) {
       loadMoreCatBreeds();
     }
   }, [inView]);
 
+  if (!catImageList || numberOfResults === 0) {
+    return <Typography variant="h4">No results found</Typography>;
+  }
+
   return (
     <>
       <Typography
         variant="subtitle1"
         alignSelf="flex-start"
-      >{`Showing ${catImageList?.length ?? 0} results`}</Typography>
-      <Grid container spacing={2} key={Math.random()}>
-        {catImageList?.map(({ url, breeds }) =>
+      >{`Showing ${numberOfResults} ${numberOfResults == 1 ? "result" : "results"}`}</Typography>
+      <Grid container spacing={2} key={Math.random()} role="list">
+        {catImageList.map(({ url, breeds }) =>
           breeds?.map(({ name, id }) => (
             <Grid
               key={id}
@@ -72,6 +74,7 @@ export default function CatImageList({
               lg={3}
               xl={2}
               alignItems="center"
+              role="listitem"
             >
               <CatImageItem name={name} url={url} />
             </Grid>

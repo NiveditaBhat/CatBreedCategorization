@@ -13,6 +13,8 @@ export default function Loading() {
         justifyContent="center"
         gap={4}
         p={4}
+        aria-label="Loading cat breeds data..."
+        role="progressbar"
       >
         <Skeleton height="100px" width="300px" />
         <LoadingSkeletonList />

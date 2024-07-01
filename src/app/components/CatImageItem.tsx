@@ -28,15 +28,12 @@ export default function CatImageItem({ url, name }: CatImageItemProps) {
       >
         <Image
           src={url}
-          // width={226}
-          // height={217}
           fill
           priority={false}
           style={{
-            //  height: "100%",
-            // width: "auto",
             objectFit: "contain",
           }}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           alt={`Image of cat breed ${name}`}
         />
       </Box>

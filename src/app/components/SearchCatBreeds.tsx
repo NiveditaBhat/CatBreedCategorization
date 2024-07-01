@@ -22,7 +22,9 @@ export default function SearchCatBreeds({
 }: SearchCatBreedsProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { replace, refresh } = useRouter();
+  const { replace } = useRouter();
+
+  console.log("pathname", pathname);
 
   const [searchOptions, setSearchOptions] = useState<SearchOption[]>(
     selectedBreed ? [selectedBreed] : [],

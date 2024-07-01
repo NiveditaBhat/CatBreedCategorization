@@ -5,16 +5,16 @@ export type Image = {
   url: string;
 };
 
-type CatBreed = {
+type CatBreedItem = {
   weight: {
     imperial: string;
     metric: string;
   };
   id: string;
   name: string;
-  cfa_url: string;
-  vetstreet_url: string;
-  vcahospitals_url: string;
+  cfa_url?: string;
+  vetstreet_url?: string;
+  vcahospitals_url?: string;
   temperament: string;
   origin: string;
   country_codes: string;
@@ -22,7 +22,7 @@ type CatBreed = {
   description: string;
   life_span: string;
   indoor: number;
-  lap: number;
+  lap?: number;
   alt_names: string;
   adaptability: number;
   affection_level: number;
@@ -53,7 +53,8 @@ export type CatImage = Image & {
   breeds: { id: string; name: string }[] | undefined;
 };
 
-export type getCatImagesResponse = (Image & {
-  breeds: CatBreed[];
+export type GetCatImagesResponse = (Image & {
+  breeds: CatBreedItem[];
 })[];
-export type getCatBreedsResponse = { id: string; name: string }[];
+export type GetCatBreedsResponse = CatBreedItem[];
+export type CatBreed = { id: string; name: string };

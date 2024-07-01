@@ -15,7 +15,7 @@ export default function LoadingSkeletonList() {
         }}
       />
       <Grid container spacing={2}>
-        {Array.from(new Array(TOTAL)).map((key) => (
+        {Array.from(new Array(TOTAL).keys()).map((key) => (
           <Grid key={key} item sm={6} md={4} lg={3} xl={2} alignItems="center">
             <Skeleton variant="rectangular" height="300px" />
           </Grid>
