@@ -1,9 +1,8 @@
-"use client";
 import Grid from "@mui/material/Grid";
 
 import { CatImage } from "../lib/catBreedTypes";
 import Typography from "@mui/material/Typography";
-import { useState, useEffect, useId, Suspense } from "react";
+import { useState, useEffect } from "react";
 
 import { useInView } from "react-intersection-observer";
 
@@ -11,7 +10,7 @@ import { fetchCatImages } from "../actions/fetchCatImages";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import CatImageItem from "./CatImageItem";
-import LoadingSkeletonList from "@/app/components/LoadingSkeletonList";
+import Box from "@mui/material/Box";
 
 type CatImageListProps = {
   initialCatImageList: CatImage[] | null;
@@ -38,7 +37,7 @@ export default function CatImageList({
   useEffect(() => {
     const loadMoreCatBreeds = async () => {
       const newList = await fetchCatImages(offset + PAGE_LIMIT, selectedBreed);
-      console.log("offset + PAGE_LIMIT", offset + PAGE_LIMIT);
+
       if (!newList?.length) {
         setLoadMoreImages(false);
         return;
@@ -53,7 +52,13 @@ export default function CatImageList({
   }, [inView]);
 
   if (!catImageList || numberOfResults === 0) {
-    return <Typography variant="h4">No results found</Typography>;
+    return (
+      <Box padding={20}>
+        <Typography variant="h5" color="primary">
+          Sorry, we couldn't find any results.
+        </Typography>
+      </Box>
+    );
   }
 
   return (

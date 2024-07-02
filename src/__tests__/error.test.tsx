@@ -45,11 +45,8 @@ describe("Error Page", () => {
           message: "Something went wrong",
         }}
         reset={jest.fn()}
-        searchParams={{}}
       />,
     );
-
-    expect(screen.getByLabelText("Choose a breed")).toBeInTheDocument();
 
     expect(screen.getByAltText("Error icon")).toBeInTheDocument();
     expect(
@@ -72,7 +69,6 @@ describe("Error Page", () => {
           message: "Something went wrong",
         }}
         reset={resetSpy}
-        searchParams={{}}
       />,
     );
 

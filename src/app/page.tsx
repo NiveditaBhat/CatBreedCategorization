@@ -8,13 +8,11 @@ export default async function Home({
   searchParams,
 }: {
   searchParams?: {
-    query?: string;
     page?: string;
     breed_id?: string;
     breed_name?: string;
   };
 }) {
-  const searchQuery = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 0;
   const breedId = searchParams?.breed_id || "";
   const breedName = searchParams?.breed_name || "";
@@ -23,15 +21,11 @@ export default async function Home({
     breedId && breedName ? { id: breedId, label: breedName } : null;
 
   const catImages = await fetchCatImages(currentPage, breedId);
-  console.log("selectedBreed", selectedBreed);
-  console.log("catImages", catImages?.length);
-  // console.log("catImagesserver", JSON.stringify(catImages));
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" suppressHydrationWarning>
       <Box>
         <CatImagesContainer
-          searchQuery={searchQuery}
           currentPage={currentPage}
           selectedBreed={selectedBreed}
           initialCatImageList={catImages}

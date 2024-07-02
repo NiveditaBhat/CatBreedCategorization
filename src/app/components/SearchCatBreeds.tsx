@@ -1,6 +1,6 @@
 import TextField from "@mui/material/TextField";
 import { useDebouncedCallback } from "use-debounce";
-import { SyntheticEvent, useState } from "react";
+import { useState } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
@@ -24,24 +24,22 @@ export default function SearchCatBreeds({
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  console.log("pathname", pathname);
-
   const [searchOptions, setSearchOptions] = useState<SearchOption[]>(
     selectedBreed ? [selectedBreed] : [],
   );
-  //const [value, setValue] = useState<SearchOption | null>(selectedBreed);
 
-  const handleOnChange = async (value: SearchOption | null) => {
-    //  setValue(value);
+  const [value, setValue] = useState<SearchOption | null>(selectedBreed);
+
+  const handleOnChange = (newValue: SearchOption | null) => {
     const params = new URLSearchParams(searchParams);
-    if (value) {
-      params.set("breed_id", value.id);
-      params.set("breed_name", value.label);
+    if (newValue) {
+      params.set("breed_id", newValue.id);
+      params.set("breed_name", newValue.label);
     } else {
       params.delete("breed_id");
       params.delete("breed_name");
     }
-
+    setValue(newValue);
     replace(`${pathname}?${params.toString()}`);
   };
 
@@ -61,19 +59,15 @@ export default function SearchCatBreeds({
 
   return (
     <Autocomplete
-      defaultValue={selectedBreed}
+      value={value}
       onChange={(event, newValue) => {
         handleOnChange(newValue);
       }}
-      onInputChange={(
-        event: React.SyntheticEvent,
-        value: string,
-        reason: string,
-      ) => {
+      onInputChange={(_, value: string) => {
         handleInputValueChange(value);
       }}
       id="search-cat-breeds"
-      getOptionLabel={(option) => option.label}
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       options={searchOptions}
       sx={{ width: 300 }}
       renderInput={(params) => (

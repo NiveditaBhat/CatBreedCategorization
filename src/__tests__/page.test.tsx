@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import Page from "../app/page";
 import server from "../mocks/server";
 import { API_BASE } from "@/config";
@@ -21,6 +21,8 @@ jest.mock("next/navigation", () => ({
     .fn()
     .mockReturnValue("https://www.catBreedCategorization.com/"),
 }));
+
+jest.mock("uuid", () => ({ v4: () => "00000000-0000-0000-0000-000000000000" }));
 
 describe("Home Page", () => {
   const mockRouter = {

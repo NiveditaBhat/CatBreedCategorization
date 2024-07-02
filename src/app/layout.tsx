@@ -7,8 +7,8 @@ import theme from "../theme";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Cats",
-  description: "Cats nextjs app",
+  title: "Cat breed categorization app",
+  description: "Search cat breeds",
 };
 
 export default function RootLayout({

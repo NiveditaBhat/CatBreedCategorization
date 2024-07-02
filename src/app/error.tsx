@@ -8,23 +8,10 @@ import SearchCatBreeds from "@/app/components/SearchCatBreeds";
 export default function Error({
   error,
   reset,
-  searchParams,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
-  searchParams?: {
-    query?: string;
-    page?: string;
-    breed_id?: string;
-    breed_name?: string;
-  };
 }) {
-  const breedId = searchParams?.breed_id || "";
-  const breedName = searchParams?.breed_name || "";
-
-  const selectedBreed =
-    breedId && breedName ? { id: breedId, label: breedName } : null;
-
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -44,7 +31,6 @@ export default function Error({
         gap={20}
         p={4}
       >
-        <SearchCatBreeds selectedBreed={selectedBreed} />
         <GenericError onResetClicked={() => reset()} />
       </Box>
     </Container>
