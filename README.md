@@ -39,11 +39,12 @@ npm run test
 
 ## Features
 
-1. Initial load is server side and loads 10 cat images.
-2. A responsive grid layout is used to display the cat images.
-3. A Loading skeleton is shown until the images are loaded from the server the first time.
-4. When the user scrolls down the page, 10 more images are loaded each time until there are no more images to load. 
-5. Search is performed on the total number of images and returns the cat images of the chosen breed.
-6. The selected cat breed is added as search params to the url.
-7. Reloading the page with search params, preserves the search state.
-8. An error page is shown when there are server-side errors. 
+1. The cat images are displayed in ascending order from the Cat images API.
+2. Initial load is server side and loads 10 cat images.
+3. A responsive grid layout is used to display the cat images.
+4. A Loading skeleton is shown until the images are loaded from the server the first time.
+5. When the user scrolls down the page, 10 more images are loaded each time until there are no more images to load. 
+6. Search is performed on the total number of images and returns the cat images of the chosen breed.
+7. The selected cat breed is added as search params to the url.
+8. Reloading the page with search params, preserves the search state.
+9. An error page is shown when there are server-side errors. 
