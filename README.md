@@ -4,10 +4,16 @@ This is a [Next.js](https://nextjs.org/) application bootstrapped with [create-n
 
 ## Table of Contents
 
+- [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Environment variables](#environment-variables)
 - [Usage](#usage)
 - [Features](#features)
+
+
+## Prerequisites  
+
+[Node.js 18.17 or later](https://nodejs.org/en)
 
 ## Installation
 
