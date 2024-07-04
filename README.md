@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org/) application bootstrapped with [create-n
 ## Table of Contents
 
 - [Installation](#installation)
-- [Environment variables](#environmentVariables)
+- [Environment variables](#environment-variables)
 - [Usage](#usage)
 - [Features](#features)
 
