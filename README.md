@@ -5,6 +5,7 @@ This is a [Next.js](https://nextjs.org/) application bootstrapped with [create-n
 ## Table of Contents
 
 - [Installation](#installation)
+- [Environment variables](#environmentVariables)
 - [Usage](#usage)
 - [Features](#features)
 
@@ -17,6 +18,15 @@ git clone https://github.com/NiveditaBhat/CatBreedCategorization.git
 cd your-repository
 npm install
 ```
+
+## Environment variables
+
+Create .env.local file for local environment. Add the following environment variables,
+
+- API_KEY = API key from CAT API
+- API_BASE = CAT API url
+
+Please refer to [Cat API](https://thecatapi.com/) for more info
 
 ## Usage
 
